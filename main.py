@@ -1,7 +1,7 @@
 from supabase_client import get_user_profile
 from prompt_formatter import format_prompt
 from gemini_client import get_ingredient_report
-from processing import INGREDIENTS_TEXT
+from processing import extract_text_from_image
 
 def main():
     # Sample user ID — must match one from your Supabase table
@@ -13,8 +13,14 @@ def main():
         print("❌ User not found.")
         return
 
-    # Step 2: Use extracted text from image
-    ingredients_input = INGREDIENTS_TEXT
+    # Step 2: Extract text from image
+    print("\n📸 Processing image...")
+    try:
+        ingredients_input = extract_text_from_image()
+        print("\n✅ Image processed successfully!")
+    except Exception as e:
+        print(f"❌ Error processing image: {str(e)}")
+        return
 
     # Step 3: Format prompt
     prompt = format_prompt(ingredients_input, user_profile)
